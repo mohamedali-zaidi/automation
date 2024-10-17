@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: Parse Webhook Data
         run: |
-          echo "Webhook data received: ${{ github.event.client_payload }}"
+          echo "Webhook data received: ${{ toJson(github.event.client_payload) }}"
       
       - name: Send notification to MS Teams
         run: |
