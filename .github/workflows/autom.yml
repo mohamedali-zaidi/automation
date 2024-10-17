@@ -41,7 +41,7 @@ jobs:
           {
             "text": "**Issue Summary:** $ISSUE_SUMMARY \\n**Assigned Developer:** $ASSIGNEE \\n**Due Date:** $DUE_DATE \\n**Status:** $STATUS \\n[View Issue](https://mohamedalizaidi48.atlassian.net/browse/${{ github.event.client_payload.issue.key }})"
           }
-            EOF
+          EOF
           )
 
           # Debug the constructed JSON payload
