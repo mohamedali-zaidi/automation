@@ -3,7 +3,7 @@ name: Webhook Trigger
 on:
   repository_dispatch:
     types: 
-      - jira_webhook
+      - jira:issue_updated
 
 jobs:
   handle-webhook:
