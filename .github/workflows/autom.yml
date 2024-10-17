@@ -2,7 +2,8 @@ name: Webhook Trigger
 
 on:
   repository_dispatch:
-    types: [jira_webhook]
+    types: 
+      - jira_webhook
 
 jobs:
   handle-webhook:
@@ -10,4 +11,4 @@ jobs:
 
     steps:
       - name: Log Webhook Payload
-        run: echo "Webhook payload: ${{ toJson(github.event.client_payload) }}
+        run: echo "Webhook payload:${{ toJson(github.event.client_payload) }}"
