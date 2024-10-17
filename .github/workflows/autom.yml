@@ -9,11 +9,5 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Process Webhook Payload
-        run: |
-          echo "Issue Key: ${{ github.event.client_payload.issue.key }}"
-          echo "Summary: ${{ github.event.client_payload.issue.fields.summary }}"
-          echo "Status: ${{ github.event.client_payload.issue.fields.status.name }}"
-          echo "Assignee: ${{ github.event.client_payload.issue.fields.assignee.displayName }}"
-          echo "Due Date: ${{ github.event.client_payload.issue.fields.duedate }}"
-
+      - name: Log Webhook Payload
+        run: echo "Webhook payload: ${{ toJson(github.event.client_payload) }}"
