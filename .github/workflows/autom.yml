@@ -1,0 +1,16 @@
+name: Jira Notification Workflow
+
+on:
+  repository_dispatch:
+    types: [jira_webhook]  # Custom event name
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Parse Webhook Data
+        run: |
+          echo "Webhook data received: ${{ github.event.client_payload }}"
+      - name: Send notification to MS Teams
+        run: |
+          # Here you would parse and use the data to send a message to MS Teams
