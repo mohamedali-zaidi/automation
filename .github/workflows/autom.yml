@@ -2,7 +2,6 @@ name: Webhook Trigger
 
 on:
   repository_dispatch:
-    types: [Webhook Event]
 
 jobs:
   handle-webhook:
