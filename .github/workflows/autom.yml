@@ -36,12 +36,12 @@ jobs:
           echo "Due Date: '$DUE_DATE'"
           echo "Status: '$STATUS'"
 
-          # Construct the JSON payload properly
+          # Construct the JSON payload with proper line breaks
           JSON_PAYLOAD=$(cat <<EOF
           {
-            "text": "**Issue Summary:** $ISSUE_SUMMARY \n**Assigned Developer:** $ASSIGNEE \n**Due Date:** $DUE_DATE \n**Status:** $STATUS \n[View Issue](https://your-jira-instance/browse/${{ github.event.client_payload.issue.key }})"
+            "text": "**Issue Summary:** $ISSUE_SUMMARY \\n**Assigned Developer:** $ASSIGNEE \\n**Due Date:** $DUE_DATE \\n**Status:** $STATUS \\n[View Issue](https://your-jira-instance/browse/${{ github.event.client_payload.issue.key }})"
           }
-          EOF
+            EOF
           )
 
           # Debug the constructed JSON payload
