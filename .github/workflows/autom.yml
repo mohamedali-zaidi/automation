@@ -1,7 +1,8 @@
 name: Webhook Trigger
 
 on:
-  workflow_dispatch:
+  repository_dispatch:
+    types: [jira_webhook]
 
 jobs:
   handle-webhook:
@@ -15,3 +16,4 @@ jobs:
           echo "Status: ${{ github.event.client_payload.issue.fields.status.name }}"
           echo "Assignee: ${{ github.event.client_payload.issue.fields.assignee.displayName }}"
           echo "Due Date: ${{ github.event.client_payload.issue.fields.duedate }}"
+
