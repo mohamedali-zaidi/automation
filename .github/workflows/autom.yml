@@ -14,7 +14,7 @@ jobs:
 
       - name: Debug Variables
         run: |
-          echo "Issue Summary: '${{ github.event.client_payload.issue.fields.summary }}'"
+          echo "Issue Summary: '${{ toJson(github.event.client_payload.issue.fields.summary) }}'"
           echo "Assigned Developer: '${{ github.event.client_payload.issue.fields.assignee.displayName }}'"
           echo "Due Date: '${{ github.event.client_payload.issue.fields.duedate }}'"
           echo "Status: '${{ github.event.client_payload.issue.fields.status.name }}'"
