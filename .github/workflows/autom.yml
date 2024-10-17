@@ -1,7 +1,7 @@
 name: Webhook Trigger
 
 on:
-  repository_dispatch:
+  workflow_dispatch:
 
 jobs:
   handle-webhook:
