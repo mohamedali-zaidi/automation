@@ -2,7 +2,7 @@ name: Webhook Trigger
 
 on:
   repository_dispatch:
-    types: [jira_webhook]
+    types: [Webhook Event]
 
 jobs:
   handle-webhook:
