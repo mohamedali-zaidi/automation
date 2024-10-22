@@ -42,6 +42,17 @@ jobs:
       - name: Send Approval Request to MS Teams
         if: ${{ github.event.client_payload.issue.fields.status.name == 'Awaiting for Approval' }}
         run: |
+          ISSUE_SUMMARY=$(echo "${{ github.event.client_payload.issue.fields.summary }}" | sed 's/"/\\"/g')
+          ASSIGNEE=$(echo "${{ github.event.client_payload.issue.fields.assignee.displayName }}" | sed 's/"/\\"/g')
+          DUE_DATE=$(echo "${{ github.event.client_payload.issue.fields.duedate }}" | sed 's/"/\\"/g')
+          STATUS=$(echo "${{ github.event.client_payload.issue.fields.status.name }}" | sed 's/"/\\"/g')
+
+          JSON_PAYLOAD=$(cat <<EOF
+          {
+            "text": "$JSON_PAYLOAD"
+          }
+          EOF
+          )
           ADAPTIVE_CARD_PAYLOAD=$(cat <<EOF
           {
             "@type": "MessageCard",
