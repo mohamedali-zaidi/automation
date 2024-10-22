@@ -47,49 +47,55 @@ jobs:
           # Construct the Adaptive Card JSON payload
           ADAPTIVE_CARD_PAYLOAD=$(cat <<EOF
           {
-            "type": "message",
-            "attachments": [
+            "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+            "type": "AdaptiveCard",
+            "version": "1.3",
+            "body": [
               {
-                "contentType": "application/vnd.microsoft.card.adaptive",
-                "content": {
-                  "\$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-                  "type": "AdaptiveCard",
-                  "version": "1.3",
-                  "body": [
-                    {
-                      "type": "TextBlock",
-                      "text": "Approval Required for Issue: $ISSUE_SUMMARY",
-                      "weight": "Bolder",
-                      "size": "Medium"
-                    },
-                    {
-                      "type": "TextBlock",
-                      "text": "[View Issue](https://mohamedalizaidi48.atlassian.net/browse/$ISSUE_KEY)",
-                      "wrap": true
-                    }
-                  ],
-                  "actions": [
-                    {
-                      "type": "Action.Submit",
-                      "title": "Approve",
-                      "data": {
-                        "action": "approve",
-                        "issueKey": "$ISSUE_KEY"
-                      }
-                    },
-                    {
-                      "type": "Action.Submit",
-                      "title": "Reject",
-                      "data": {
-                        "action": "reject",
-                        "issueKey": "$ISSUE_KEY"
-                      }
-                    }
-                  ]
-                }
+                "type": "TextBlock",
+                "text": "Approval required for issue: ${issueSummary}",
+                "weight": "Bolder",
+                "size": "Medium"
+              },
+              {
+                "type": "TextBlock",
+                "text": "[View Issue](https://your-jira-instance.com/browse/${issueKey})",
+                "wrap": true
+              }
+            ],
+            "actions": [
+              {
+                "type": "Action.Http",
+                "method": "POST",
+                "url": "https://api.github.com/repos/mohamedali-zaidi/automation/dispatches", // Your server's endpoint
+                "title": "Approve",
+                "body": "{\"action\": \"approve\", \"issueKey\": \"${issueKey}\"}",
+                "headers": [
+                  {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "name" : "Authorization",
+                    "value" : "Bearer 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"
+                  }
+                ]
+              },
+              {
+                "type": "Action.Http",
+                "method": "POST",
+                "url": "https://api.github.com/repos/mohamedali-zaidi/automation/dispatches",
+                "title": "Reject",
+                "body": "{\"action\": \"reject\", \"issueKey\": \"${issueKey}\"}",
+                "headers": [
+                  {
+                    "name": "Content-Type",
+                    "value": "application/json", "name" : "Authorization",
+                    "value" : "Bearer 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"
+                  }
+                ]
               }
             ]
           }
+
           EOF
           )
 
