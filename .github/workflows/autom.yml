@@ -112,6 +112,65 @@ jobs:
       - name: Debug Adaptive Card Payload
         run: |
           echo "Adaptive Card Payload: $ADAPTIVE_CARD_PAYLOAD"
-
-
-
+      - name: Test Send Hardcoded Adaptive Card
+        run: |
+          HARD_CODED_PAYLOAD='{
+            "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+            "type": "AdaptiveCard",
+            "version": "1.3",
+            "body": [
+              {
+                "type": "TextBlock",
+                "text": "Approval required for issue: Hardcoded Issue Summary",
+                "weight": "Bolder",
+                "size": "Medium"
+              },
+              {
+                "type": "TextBlock",
+                "text": "[View Issue](https://mohamedalizaidi48.atlassian.net/browse/SCRUM-8)",
+                "wrap": true
+              }
+            ],
+            "actions": [
+              {
+                "type": "Action.Http",
+                "method": "POST",
+                "url": "https://api.github.com/repos/mohamedali-zaidi/automation/dispatches",
+                "title": "Approve",
+                "body": "{\"action\": \"approve\", \"issueKey\": \"SCRUM-8\"}",
+                "headers": [
+                  {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "name": "Authorization",
+                    "value": "Bearer YOUR_GITHUB_TOKEN"
+                  }
+                ]
+              },
+              {
+                "type": "Action.Http",
+                "method": "POST",
+                "url": "https://api.github.com/repos/mohamedali-zaidi/automation/dispatches",
+                "title": "Reject",
+                "body": "{\"action\": \"reject\", \"issueKey\": \"SCRUM-8\"}",
+                "headers": [
+                  {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "name": "Authorization",
+                    "value": "Bearer YOUR_GITHUB_TOKEN"
+                  }
+                ]
+              }
+            ]
+          }'
+      
+          # Send the hardcoded payload
+          curl -H "Content-Type: application/json" -d "$HARD_CODED_PAYLOAD" https://avaxia.webhook.office.com/webhookb2/aa5a370b-ad1a-4c10-b494-e15d9490f751@7ecf1dcb-eca3-4727-8201-49cf4c94b669/IncomingWebhook/77dc558b4d66402db52b304ce78097e7/c4682019-2eb9-4850-9ea4-d512675d55bb/V2Pd7iajBd6SYzb33ivoOoma3Tds6gdz6Eh0mRcUvO2UU1
+      
+      
+      
