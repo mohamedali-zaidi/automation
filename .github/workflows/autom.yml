@@ -55,13 +55,13 @@ jobs:
             "body": [
               {
                 "type": "TextBlock",
-                "text": "Approval required for issue: Hardcoded Issue Summary",
+                "text": "Approval required for issue: $ISSUE_SUMMARY",
                 "weight": "Bolder",
                 "size": "Medium"
               },
               {
                 "type": "TextBlock",
-                "text": "[View Issue](https://mohamedalizaidi48.atlassian.net/browse/SCRUM-8)",
+                "text": "[View Issue](https://mohamedalizaidi48.atlassian.net/browse/$ISSUE_KEY)",
                 "wrap": true
               }
             ],
@@ -79,7 +79,7 @@ jobs:
                   },
                   {
                     "name": "Authorization",
-                    "value": "Bearer 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"
+                    "value": "Bearer YOUR_GITHUB_TOKEN"
                   }
                 ]
               },
@@ -96,7 +96,7 @@ jobs:
                   },
                   {
                     "name": "Authorization",
-                    "value": "Bearer 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"
+                    "value": "Bearer YOUR_GITHUB_TOKEN"
                   }
                 ]
               }
@@ -104,6 +104,7 @@ jobs:
           }
           EOF
           )
+
 
 
           # Send the Adaptive Card to MS Teams
