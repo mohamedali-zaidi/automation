@@ -17,7 +17,7 @@ jobs:
             echo "Updating Jira issue $ISSUE_KEY to Approved"
             curl -X PUT -H "Content-Type: application/json" \
             -H "Authorization: Basic ATATT3xFfGF0BEYbypzIBS_r5r82daYYiH3TsbicxxL5rhaAm0XRETopAPFb2qZg5E2ORb7_lmzC797Tu4EnlSHB3ZdFZ_UkN10-9rq5Cal0-qxQ-Nk5XIKPCuSl7yzolMJU4ClnwT-p4KeG6zxok3GI2pdkug6HVa3RcGPTDuViL8jtryP4OXQ=83221B3F \
-            --data '{"fields": {"status": {"name": "Approved"}}}' \
+            --data '{"Issue" {"fields": {"status": {"name": "Approved"}}}}' \
             https://mohamedalizaidi48.atlassian.net/rest/api/2/issue/SCRUM-8
           elif [ "$ACTION" == "reject" ]; then
             echo "Updating Jira issue $ISSUE_KEY to Rejected"
