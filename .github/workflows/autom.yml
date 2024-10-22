@@ -38,139 +38,44 @@ jobs:
 
           curl -H "Content-Type: application/json" -d "$JSON_PAYLOAD" https://avaxia.webhook.office.com/webhookb2/aa5a370b-ad1a-4c10-b494-e15d9490f751@7ecf1dcb-eca3-4727-8201-49cf4c94b669/IncomingWebhook/77dc558b4d66402db52b304ce78097e7/c4682019-2eb9-4850-9ea4-d512675d55bb/V2Pd7iajBd6SYzb33ivoOoma3Tds6gdz6Eh0mRcUvO2UU1
 
-      # Step 4: Send an Adaptive Card for Approval to MS Teams
-      - name: Send Adaptive Card for Approval
-        if: ${{ github.event.client_payload.issue.fields.status.name == 'Awaiting for Approval' }}
-
+      - name: Send Approval Request to MS Teams
+        if: ${{ github.event.client_payload.issue.fields.status.name == 'Waiting for Approval' }}
         run: |
-          ISSUE_KEY="${{ github.event.client_payload.issue.key }}"
-          ISSUE_SUMMARY=$(echo "${{ github.event.client_payload.issue.fields.summary }}" | sed 's/"/\\"/g')
-          echo "Formatted Issue Summary: '$ISSUE_SUMMARY'"
-          # Construct the Adaptive Card JSON payload
+          # Create an Adaptive Card JSON payload for MS Teams
           ADAPTIVE_CARD_PAYLOAD=$(cat <<EOF
           {
-            "\$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-            "type": "AdaptiveCard",
-            "version": "1.3",
-            "body": [
+            "@type": "MessageCard",
+            "@context": "http://schema.org/extensions",
+            "summary": "Approval Request for Issue ${{ github.event.client_payload.issue.key }}",
+            "themeColor": "0076D7",
+            "title": "Approval Required: $ISSUE_SUMMARY",
+            "sections": [
               {
-                "type": "TextBlock",
-                "text": "Approval required for issue: $ISSUE_SUMMARY",
-                "weight": "Bolder",
-                "size": "Medium"
-              },
-              {
-                "type": "TextBlock",
-                "text": "[View Issue](https://mohamedalizaidi48.atlassian.net/browse/$ISSUE_KEY)",
-                "wrap": true
+                "activityTitle": "Issue Summary",
+                "text": "**Assigned Developer:** $ASSIGNEE\n**Due Date:** $DUE_DATE\n**Status:** $STATUS",
+                "markdown": true
               }
             ],
-            "actions": [
+            "potentialAction": [
               {
-                "type": "Action.Http",
-                "method": "POST",
-                "url": "https://api.github.com/repos/mohamedali-zaidi/automation/dispatches",
-                "title": "Approve",
-                "body": "{\"action\": \"approve\", \"issueKey\": \"$ISSUE_KEY\"}",
-                "headers": [
-                  {
-                    "name": "Content-Type",
-                    "value": "application/json"
-                  },
-                  {
-                    "name": "Authorization",
-                    "value": "Bearer YOUR_GITHUB_TOKEN"
-                  }
-                ]
+                "@type": "HttpPOST",
+                "name": "Approve",
+                "target": "https://your-serverless-function-endpoint/approve",
+                "body": "{\"issueKey\": \"${{ github.event.client_payload.issue.key }}\", \"action\": \"approve\"}"
               },
               {
-                "type": "Action.Http",
-                "method": "POST",
-                "url": "https://api.github.com/repos/mohamedali-zaidi/automation/dispatches",
-                "title": "Reject",
-                "body": "{\"action\": \"reject\", \"issueKey\": \"$ISSUE_KEY\"}",
-                "headers": [
-                  {
-                    "name": "Content-Type",
-                    "value": "application/json"
-                  },
-                  {
-                    "name": "Authorization",
-                    "value": "Bearer YOUR_GITHUB_TOKEN"
-                  }
-                ]
+                "@type": "HttpPOST",
+                "name": "Reject",
+                "target": "https://your-serverless-function-endpoint/reject",
+                "body": "{\"issueKey\": \"${{ github.event.client_payload.issue.key }}\", \"action\": \"reject\"}"
               }
             ]
           }
           EOF
           )
 
-
+          # Debug the Adaptive Card payload
+          echo "Adaptive Card Payload: $ADAPTIVE_CARD_PAYLOAD"
 
           # Send the Adaptive Card to MS Teams
           curl -H "Content-Type: application/json" -d "$ADAPTIVE_CARD_PAYLOAD" https://avaxia.webhook.office.com/webhookb2/aa5a370b-ad1a-4c10-b494-e15d9490f751@7ecf1dcb-eca3-4727-8201-49cf4c94b669/IncomingWebhook/77dc558b4d66402db52b304ce78097e7/c4682019-2eb9-4850-9ea4-d512675d55bb/V2Pd7iajBd6SYzb33ivoOoma3Tds6gdz6Eh0mRcUvO2UU1
-      - name: Debug Adaptive Card Payload
-        run: |
-          echo "Adaptive Card Payload: $ADAPTIVE_CARD_PAYLOAD"
-      - name: Test Send Hardcoded Adaptive Card
-        run: |
-          HARD_CODED_PAYLOAD='{
-            "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-            "type": "AdaptiveCard",
-            "version": "1.3",
-            "body": [
-              {
-                "type": "TextBlock",
-                "text": "Approval required for issue: Hardcoded Issue Summary",
-                "weight": "Bolder",
-                "size": "Medium"
-              },
-              {
-                "type": "TextBlock",
-                "text": "[View Issue](https://mohamedalizaidi48.atlassian.net/browse/SCRUM-8)",
-                "wrap": true
-              }
-            ],
-            "actions": [
-              {
-                "type": "Action.Http",
-                "method": "POST",
-                "url": "https://api.github.com/repos/mohamedali-zaidi/automation/dispatches",
-                "title": "Approve",
-                "body": "{\"action\": \"approve\", \"issueKey\": \"SCRUM-8\"}",
-                "headers": [
-                  {
-                    "name": "Content-Type",
-                    "value": "application/json"
-                  },
-                  {
-                    "name": "Authorization",
-                    "value": "Bearer YOUR_GITHUB_TOKEN"
-                  }
-                ]
-              },
-              {
-                "type": "Action.Http",
-                "method": "POST",
-                "url": "https://api.github.com/repos/mohamedali-zaidi/automation/dispatches",
-                "title": "Reject",
-                "body": "{\"action\": \"reject\", \"issueKey\": \"SCRUM-8\"}",
-                "headers": [
-                  {
-                    "name": "Content-Type",
-                    "value": "application/json"
-                  },
-                  {
-                    "name": "Authorization",
-                    "value": "Bearer YOUR_GITHUB_TOKEN"
-                  }
-                ]
-              }
-            ]
-          }'
-      
-          # Send the hardcoded payload
-          curl -H "Content-Type: application/json" -d "$HARD_CODED_PAYLOAD" https://avaxia.webhook.office.com/webhookb2/aa5a370b-ad1a-4c10-b494-e15d9490f751@7ecf1dcb-eca3-4727-8201-49cf4c94b669/IncomingWebhook/77dc558b4d66402db52b304ce78097e7/c4682019-2eb9-4850-9ea4-d512675d55bb/V2Pd7iajBd6SYzb33ivoOoma3Tds6gdz6Eh0mRcUvO2UU1
-      
-      
-      
