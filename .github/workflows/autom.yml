@@ -21,14 +21,11 @@ jobs:
           echo "Due Date: '${{ github.event.client_payload.issue.fields.duedate }}'"
           echo "Status: '${{ github.event.client_payload.issue.fields.status.name }}'"
 
-      # Step 3: Check if Status is "Awaiting Approval"
-      - name: Check for "Awaiting Approval" Status
-        if: ${{ github.event.client_payload.issue.fields.status.name == 'Awaiting for Approval' }}
-        run: echo "Status is Awaiting Approval, proceeding to send Adaptive Card."
+      
 
       # Step 4: Send an Adaptive Card for Approval to MS Teams (only if the status is "Awaiting Approval")
       - name: Send Adaptive Card for Approval
-        if: ${{ github.event.client_payload.issue.fields.status.name == 'Awaiting Approval' }}
+        if: ${{ github.event.client_payload.issue.fields.status.name == 'Awaiting for Approval' }}
         run: |
           ISSUE_KEY="${{ github.event.client_payload.issue.key }}"
           ISSUE_SUMMARY=$(echo "${{ github.event.client_payload.issue.fields.summary }}" | sed 's/"/\\"/g')
