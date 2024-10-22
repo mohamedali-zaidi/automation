@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Handle Approval or Rejection
         run: |
-          ISSUE_KEY="${{ github.event.client_payload.issueKey }}"
+          ISSUE_KEY="${{ github.event.issueKey }}"
           ACTION="${{ github.event.action }}"
           echo "$ACTION"
           if [ "$ACTION" == "approve" ]; then
