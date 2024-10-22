@@ -1,4 +1,4 @@
-name: Jira Notification Workflow
+name: Jira Notification and Approval Workflow
 
 on:
   repository_dispatch:
@@ -21,31 +21,66 @@ jobs:
           echo "Due Date: '${{ github.event.client_payload.issue.fields.duedate }}'"
           echo "Status: '${{ github.event.client_payload.issue.fields.status.name }}'"
 
-      # Step 3: Send Notification to MS Teams
-      - name: Send Notification to MS Teams
+      # Step 3: Check if Status is "Awaiting Approval"
+      - name: Check for "Awaiting Approval" Status
+        if: ${{ github.event.client_payload.issue.fields.status.name == 'Awaiting Approval' }}
+        run: echo "Status is Awaiting Approval, proceeding to send Adaptive Card."
+
+      # Step 4: Send an Adaptive Card for Approval to MS Teams (only if the status is "Awaiting Approval")
+      - name: Send Adaptive Card for Approval
+        if: ${{ github.event.client_payload.issue.fields.status.name == 'Awaiting Approval' }}
         run: |
-          # Extract fields from the webhook payload and escape quotes
+          ISSUE_KEY="${{ github.event.client_payload.issue.key }}"
           ISSUE_SUMMARY=$(echo "${{ github.event.client_payload.issue.fields.summary }}" | sed 's/"/\\"/g')
-          ASSIGNEE=$(echo "${{ github.event.client_payload.issue.fields.assignee.displayName }}" | sed 's/"/\\"/g')
-          DUE_DATE=$(echo "${{ github.event.client_payload.issue.fields.duedate }}" | sed 's/"/\\"/g')
-          STATUS=$(echo "${{ github.event.client_payload.issue.fields.status.name }}" | sed 's/"/\\"/g')
 
-          # Debug the values to confirm they are correctly set
-          echo "Issue Summary: '$ISSUE_SUMMARY'"
-          echo "Assigned Developer: '$ASSIGNEE'"
-          echo "Due Date: '$DUE_DATE'"
-          echo "Status: '$STATUS'"
-
-          # Construct the JSON payload with proper line breaks
-          JSON_PAYLOAD=$(cat <<EOF
+          # Construct the Adaptive Card JSON payload
+          ADAPTIVE_CARD_PAYLOAD=$(cat <<EOF
           {
-            "text": "**Issue Summary:** $ISSUE_SUMMARY \n**Assigned Developer:** $ASSIGNEE \n**Due Date:** $DUE_DATE \n**Status:** $STATUS \n[View Issue](https://mohamedalizaidi48.atlassian.net/browse/${{ github.event.client_payload.issue.key }})"
+            "type": "message",
+            "attachments": [
+              {
+                "contentType": "application/vnd.microsoft.card.adaptive",
+                "content": {
+                  "\$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+                  "type": "AdaptiveCard",
+                  "version": "1.3",
+                  "body": [
+                    {
+                      "type": "TextBlock",
+                      "text": "Approval Required for Issue: $ISSUE_SUMMARY",
+                      "weight": "Bolder",
+                      "size": "Medium"
+                    },
+                    {
+                      "type": "TextBlock",
+                      "text": "[View Issue](https://mohamedalizaidi48.atlassian.net/browse/$ISSUE_KEY)",
+                      "wrap": true
+                    }
+                  ],
+                  "actions": [
+                    {
+                      "type": "Action.Submit",
+                      "title": "Approve",
+                      "data": {
+                        "action": "approve",
+                        "issueKey": "$ISSUE_KEY"
+                      }
+                    },
+                    {
+                      "type": "Action.Submit",
+                      "title": "Reject",
+                      "data": {
+                        "action": "reject",
+                        "issueKey": "$ISSUE_KEY"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
           EOF
           )
 
-          # Debug the constructed JSON payload
-          echo "JSON Payload: $JSON_PAYLOAD"
-
-          # Send the notification to MS Teams
-          curl -H "Content-Type: application/json" -d "$JSON_PAYLOAD" https://avaxia.webhook.office.com/webhookb2/aa5a370b-ad1a-4c10-b494-e15d9490f751@7ecf1dcb-eca3-4727-8201-49cf4c94b669/IncomingWebhook/77dc558b4d66402db52b304ce78097e7/c4682019-2eb9-4850-9ea4-d512675d55bb/V2Pd7iajBd6SYzb33ivoOoma3Tds6gdz6Eh0mRcUvO2UU1
+          # Send the Adaptive Card to MS Teams
+          curl -H "Content-Type: application/json" -d "$ADAPTIVE_CARD_PAYLOAD" ${{ secrets.TEAMS_WEBHOOK_URL }}
