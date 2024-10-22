@@ -26,3 +26,4 @@ jobs:
             --data '{"fields": {"status": {"name": "Rejected"}}}' \
             https://mohamedalizaidi48.atlassian.net/rest/api/2/issue/$ISSUE_KEY
           fi
+          #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
