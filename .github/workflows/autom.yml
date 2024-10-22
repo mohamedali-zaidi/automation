@@ -54,19 +54,19 @@ jobs:
               {
                 "contentType": "application/vnd.microsoft.card.adaptive",
                 "content": {
-                  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+                  "\$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
                   "type": "AdaptiveCard",
                   "version": "1.3",
                   "body": [
                     {
                       "type": "TextBlock",
-                      "text": "Approval required for issue: ${issueSummary}",
+                      "text": "Approval required for issue: $ISSUE_SUMMARY",
                       "weight": "Bolder",
                       "size": "Medium"
                     },
                     {
                       "type": "TextBlock",
-                      "text": "[View Issue](https://your-jira-instance.com/browse/${issueKey})",
+                      "text": "[View Issue](https://mohamedalizaidi48.atlassian.net/browse/$ISSUE_KEY)",
                       "wrap": true
                     }
                   ],
@@ -74,15 +74,17 @@ jobs:
                     {
                       "type": "Action.Http",
                       "method": "POST",
-                      "url": "https://api.github.com/repos/mohamedali-zaidi/automation/dispatches", // Your server's endpoint
+                      "url": "https://api.github.com/repos/mohamedali-zaidi/automation/dispatches",
                       "title": "Approve",
-                      "body": "{\"action\": \"approve\", \"issueKey\": \"${issueKey}\"}",
+                      "body": "{\"action\": \"approve\", \"issueKey\": \"$ISSUE_KEY\"}",
                       "headers": [
                         {
                           "name": "Content-Type",
-                          "value": "application/json",
-                          "name" : "Authorization",
-                          "value" : "Bearer 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"
+                          "value": "application/json"
+                        },
+                        {
+                          "name": "Authorization",
+                          "value": "Bearer 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"
                         }
                       ]
                     },
@@ -91,25 +93,23 @@ jobs:
                       "method": "POST",
                       "url": "https://api.github.com/repos/mohamedali-zaidi/automation/dispatches",
                       "title": "Reject",
-                      "body": "{\"action\": \"reject\", \"issueKey\": \"${issueKey}\"}",
+                      "body": "{\"action\": \"reject\", \"issueKey\": \"$ISSUE_KEY\"}",
                       "headers": [
                         {
                           "name": "Content-Type",
-                          "value": "application/json", "name" : "Authorization",
-                          "value" : "Bearer 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"
+                          "value": "application/json"
+                        },
+                        {
+                          "name": "Authorization",
+                          "value": "Bearer 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"
                         }
                       ]
-                    }
-                  ]
-                      }
                     }
                   ]
                 }
               }
             ]
           }
-
-
           EOF
           )
 
