@@ -56,28 +56,20 @@ jobs:
                 "markdown": true
               }
             ],
-            "potentialAction": [
-              {
-                "@type": "HttpPOST",
-                "name": "Approve",
-                "target": "https://api.github.com/repos/mohamedali-zaidi/automation/dispatches",
-                "body": "{\"event_type\": \"approve\", \"client_payload\": {\"issueKey\": \"${{ github.event.client_payload.issue.key }}\"}}",
-                "headers": {
-                  "Authorization": "token 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",
-                  "Accept": "application/vnd.github.v3+json"
-                }
-              },
-              {
-                "@type": "HttpPOST",
-                "name": "Reject",
-                "target": "https://api.github.com/repos/mohamedali-zaidi/automation/dispatches",
-                "body": "{\"event_type\": \"reject\", \"client_payload\": {\"issueKey\": \"${{ github.event.client_payload.issue.key }}\"}}",
-                "headers": {
-                  "Authorization": "token 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",
-                  "Accept": "application/vnd.github.v3+json"
-                }
-              }
-            ]
+            potentialAction: [
+            {
+              "@type": "HttpPOST",
+              "name": "Approve",
+              "target": "https://hooks.zapier.com/hooks/catch/20436215/21j8rxv/",
+              "body": "{\"issueKey\": \"${{ github.event.client_payload.issue.key }}\", \"action\": \"approve\", \"workflow_url\": \"${{ github.server_url }}/${{ github.workflow }}\"}"
+            },
+            {
+              "@type": "HttpPOST",
+              "name": "Reject",
+              "target": "https://hooks.zapier.com/hooks/catch/20436215/21j8rxv/",
+              "body": "{\"issueKey\": \"${{ github.event.client_payload.issue.key }}\", \"action\": \"reject\", \"workflow_url\": \"${{ github.server_url }}/${{ github.workflow }}\"}"
+            }
+          ]
           }
           EOF
           )
