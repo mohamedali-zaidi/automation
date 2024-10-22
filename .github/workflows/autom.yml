@@ -38,10 +38,10 @@ jobs:
 
           curl -H "Content-Type: application/json" -d "$JSON_PAYLOAD" https://avaxia.webhook.office.com/webhookb2/aa5a370b-ad1a-4c10-b494-e15d9490f751@7ecf1dcb-eca3-4727-8201-49cf4c94b669/IncomingWebhook/77dc558b4d66402db52b304ce78097e7/c4682019-2eb9-4850-9ea4-d512675d55bb/V2Pd7iajBd6SYzb33ivoOoma3Tds6gdz6Eh0mRcUvO2UU1
 
+      # Step 4: Send Approval Request to MS Teams
       - name: Send Approval Request to MS Teams
         if: ${{ github.event.client_payload.issue.fields.status.name == 'Awaiting for Approval' }}
         run: |
-          # Create an Adaptive Card JSON payload for MS Teams
           ADAPTIVE_CARD_PAYLOAD=$(cat <<EOF
           {
             "@type": "MessageCard",
@@ -60,22 +60,18 @@ jobs:
               {
                 "@type": "HttpPOST",
                 "name": "Approve",
-                "target": "https://your-serverless-function-endpoint/approve",
-                "body": "{\"issueKey\": \"${{ github.event.client_payload.issue.key }}\", \"action\": \"approve\"}"
+                "target": "https://api.github.com/repos/mohamedali-zaidi/automation/dispatches",
+                "body": "{\"event_type\": \"approve\", \"client_payload\": {\"issueKey\": \"${{ github.event.client_payload.issue.key }}\"}}"
               },
               {
                 "@type": "HttpPOST",
                 "name": "Reject",
-                "target": "https://your-serverless-function-endpoint/reject",
-                "body": "{\"issueKey\": \"${{ github.event.client_payload.issue.key }}\", \"action\": \"reject\"}"
+                "target": "https://api.github.com/repos/mohamedali-zaidi/automation/dispatches",
+                "body": "{\"event_type\": \"reject\", \"client_payload\": {\"issueKey\": \"${{ github.event.client_payload.issue.key }}\"}}"
               }
             ]
           }
           EOF
           )
 
-          # Debug the Adaptive Card payload
-          echo "Adaptive Card Payload: $ADAPTIVE_CARD_PAYLOAD"
-
-          # Send the Adaptive Card to MS Teams
           curl -H "Content-Type: application/json" -d "$ADAPTIVE_CARD_PAYLOAD" https://avaxia.webhook.office.com/webhookb2/aa5a370b-ad1a-4c10-b494-e15d9490f751@7ecf1dcb-eca3-4727-8201-49cf4c94b669/IncomingWebhook/77dc558b4d66402db52b304ce78097e7/c4682019-2eb9-4850-9ea4-d512675d55bb/V2Pd7iajBd6SYzb33ivoOoma3Tds6gdz6Eh0mRcUvO2UU1
