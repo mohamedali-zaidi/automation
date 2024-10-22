@@ -12,7 +12,7 @@ jobs:
         run: |
           ISSUE_KEY="${{ github.event.client_payload.issueKey }}"
           ACTION="${{ github.event.action }}"
-          
+          echo "$ACTION"
           if [ "$ACTION" == "approve" ]; then
             echo "Updating Jira issue $ISSUE_KEY to Approved"
             curl -X PUT -H "Content-Type: application/json" \
