@@ -1,27 +1,28 @@
-name: Jira Notification and Approval Workflow
+name: Handle Approval Workflow
 
 on:
   repository_dispatch:
-    types: [jira_webhook]
+    types: [approve, reject]
 
 jobs:
-  handle-approval:
+  handle_approval:
     runs-on: ubuntu-latest
     steps:
-      - name: Log Payload
+      - name: Handle Approval or Rejection
         run: |
-          echo "Webhook data received: ${{ toJson(github.event.client_payload) }}"
-
-      # Conditional steps based on the approval result
-      - name: Handle Approval
-        if: ${{ github.event.client_payload.approvalResult == 'approved' }}
-        run: |
-          echo "The issue was approved. Proceeding with deployment or workflow continuation."
-          # Add commands to resume the pipeline
-
-      - name: Handle Rejection
-        if: ${{ github.event.client_payload.approvalResult == 'rejected' }}
-        run: |
-          echo "The issue was rejected. Stopping the workflow."
-          # Add commands to handle rejection
-#d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
+          ISSUE_KEY="${{ github.event.client_payload.issueKey }}"
+          ACTION="${{ github.event.action }}"
+          
+          if [ "$ACTION" == "approve" ]; then
+            echo "Updating Jira issue $ISSUE_KEY to Approved"
+            curl -X PUT -H "Content-Type: application/json" \
+            -H "Authorization: Basic ${{ secrets.JIRA_API_TOKEN }}" \
+            --data '{"fields": {"status": {"name": "Approved"}}}' \
+            https://mohamedalizaidi48.atlassian.net/rest/api/2/issue/$ISSUE_KEY
+          elif [ "$ACTION" == "reject" ]; then
+            echo "Updating Jira issue $ISSUE_KEY to Rejected"
+            curl -X PUT -H "Content-Type: application/json" \
+            -H "Authorization: Basic ${{ secrets.JIRA_API_TOKEN }}" \
+            --data '{"fields": {"status": {"name": "Rejected"}}}' \
+            https://mohamedalizaidi48.atlassian.net/rest/api/2/issue/$ISSUE_KEY
+          fi
