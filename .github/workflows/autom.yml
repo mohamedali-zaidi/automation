@@ -55,13 +55,13 @@ jobs:
             "body": [
               {
                 "type": "TextBlock",
-                "text": "Approval required for issue: $ISSUE_SUMMARY",
+                "text": "Approval required for issue: Hardcoded Issue Summary",
                 "weight": "Bolder",
                 "size": "Medium"
               },
               {
                 "type": "TextBlock",
-                "text": "[View Issue](https://mohamedalizaidi48.atlassian.net/browse/$ISSUE_KEY)",
+                "text": "[View Issue](https://mohamedalizaidi48.atlassian.net/browse/SCRUM-8)",
                 "wrap": true
               }
             ],
