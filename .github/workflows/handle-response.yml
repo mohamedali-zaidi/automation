@@ -1,0 +1,26 @@
+name: Jira Notification and Approval Workflow
+
+on:
+  repository_dispatch:
+    types: [jira_webhook]
+
+jobs:
+  handle-approval:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log Payload
+        run: |
+          echo "Webhook data received: ${{ toJson(github.event.client_payload) }}"
+
+      # Conditional steps based on the approval result
+      - name: Handle Approval
+        if: ${{ github.event.client_payload.approvalResult == 'approved' }}
+        run: |
+          echo "The issue was approved. Proceeding with deployment or workflow continuation."
+          # Add commands to resume the pipeline
+
+      - name: Handle Rejection
+        if: ${{ github.event.client_payload.approvalResult == 'rejected' }}
+        run: |
+          echo "The issue was rejected. Stopping the workflow."
+          # Add commands to handle rejection
