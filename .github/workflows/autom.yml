@@ -40,7 +40,7 @@ jobs:
 
       # Step 4: Send an Adaptive Card for Approval to MS Teams
       - name: Send Adaptive Card for Approval
-        if: ${{ github.event.client_payload.issue.fields.status.name == 'Awaiting Approval' }}
+        if: ${{ github.event.client_payload.issue.fields.status.name == 'Awaiting of Approval' }}
 
         run: |
           ISSUE_KEY="${{ github.event.client_payload.issue.key }}"
