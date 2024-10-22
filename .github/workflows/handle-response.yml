@@ -24,3 +24,4 @@ jobs:
         run: |
           echo "The issue was rejected. Stopping the workflow."
           # Add commands to handle rejection
+#d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
