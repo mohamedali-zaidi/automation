@@ -15,15 +15,19 @@ jobs:
           echo "$ACTION"
           if [ "$ACTION" == "approve" ]; then
             echo "Updating Jira issue $ISSUE_KEY to Approved"
-            curl -X PUT -H "Content-Type: application/json" \
-            -H "Authorization: Bearer ATATT3xFfGF0BEYbypzIBS_r5r82daYYiH3TsbicxxL5rhaAm0XRETopAPFb2qZg5E2ORb7_lmzC797Tu4EnlSHB3ZdFZ_UkN10-9rq5Cal0-qxQ-Nk5XIKPCuSl7yzolMJU4ClnwT-p4KeG6zxok3GI2pdkug6HVa3RcGPTDuViL8jtryP4OXQ=83221B3F \
-            --data '{"fields": {"status": {"name": "Done"}}}' \
-            https://mohamedalizaidi48.atlassian.net/rest/api/2/issue/SCRUM-8
+            TRANSITION_ID="3"
+            curl -X POST \
+              -H "Content-Type: application/json" \
+              -H "Authorization: Basic bW9oYW1lZGFsaXphaWRpNDhAZ21haWwuY29tOkFUQVRUM3hGZkdGMElreVJBQVhHWkJVaU94MTJpMmVidE5tbDlZY3ZqVU1ySjIwaXdBX1FfTDlzYzBodDVwRmkyLTM4RWptakpGclhBT0ZqSUNMSHpaOGw0Mzdyb0d5Q3BZU2dRX2Y4SFRlN05sSm52d18xOERSMmFULWdqV3RDTW1lUm5NTUlfVVhkc2E2LWlheTdPYldRd3R3c0VvM1d1LWluSjRPUk12OUxHTjVSYmU5dGZ1az1GQjAzODUwNw== \
+              --data "{\"transition\": {\"id\": \"$TRANSITION_ID\"}}" \
+              "https://your-domain.atlassian.net/rest/api/2/issue/$ISSUE_KEY/transitions"
           elif [ "$ACTION" == "reject" ]; then
             echo "Updating Jira issue $ISSUE_KEY to Rejected"
-            curl -X PUT -H "Content-Type: application/json" \
-            -H "Authorization: Basic ATATT3xFfGF0BEYbypzIBS_r5r82daYYiH3TsbicxxL5rhaAm0XRETopAPFb2qZg5E2ORb7_lmzC797Tu4EnlSHB3ZdFZ_UkN10-9rq5Cal0-qxQ-Nk5XIKPCuSl7yzolMJU4ClnwT-p4KeG6zxok3GI2pdkug6HVa3RcGPTDuViL8jtryP4OXQ=83221B3F \
-            --data '{"fields": {"status": {"name": "Rejected"}}}' \
-            https://mohamedalizaidi48.atlassian.net/rest/api/2/issue/$ISSUE_KEY
+            TRANSITION_ID="2"
+            curl -X POST \
+              -H "Content-Type: application/json" \
+              -H "Authorization: Basic bW9oYW1lZGFsaXphaWRpNDhAZ21haWwuY29tOkFUQVRUM3hGZkdGMElreVJBQVhHWkJVaU94MTJpMmVidE5tbDlZY3ZqVU1ySjIwaXdBX1FfTDlzYzBodDVwRmkyLTM4RWptakpGclhBT0ZqSUNMSHpaOGw0Mzdyb0d5Q3BZU2dRX2Y4SFRlN05sSm52d18xOERSMmFULWdqV3RDTW1lUm5NTUlfVVhkc2E2LWlheTdPYldRd3R3c0VvM1d1LWluSjRPUk12OUxHTjVSYmU5dGZ1az1GQjAzODUwNw== \
+              --data "{\"transition\": {\"id\": \"$TRANSITION_ID\"}}" \
+              "https://your-domain.atlassian.net/rest/api/2/issue/$ISSUE_KEY/transitions"
           fi
           #d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
