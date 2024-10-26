@@ -20,7 +20,7 @@ jobs:
               -H "Content-Type: application/json" \
               -H "Authorization: Basic bW9oYW1lZGFsaXphaWRpNDhAZ21haWwuY29tOkFUQVRUM3hGZkdGMElreVJBQVhHWkJVaU94MTJpMmVidE5tbDlZY3ZqVU1ySjIwaXdBX1FfTDlzYzBodDVwRmkyLTM4RWptakpGclhBT0ZqSUNMSHpaOGw0Mzdyb0d5Q3BZU2dRX2Y4SFRlN05sSm52d18xOERSMmFULWdqV3RDTW1lUm5NTUlfVVhkc2E2LWlheTdPYldRd3R3c0VvM1d1LWluSjRPUk12OUxHTjVSYmU5dGZ1az1GQjAzODUwNw== \
               --data "{\"transition\": {\"id\": \"$TRANSITION_ID\"}}" \
-              "https://your-domain.atlassian.net/rest/api/2/issue/$ISSUE_KEY/transitions"
+              "https://your-domain.atlassian.net/rest/api/2/issue/SCRUM-8/transitions"
           elif [ "$ACTION" == "reject" ]; then
             echo "Updating Jira issue $ISSUE_KEY to Rejected"
             TRANSITION_ID="2"
@@ -28,6 +28,6 @@ jobs:
               -H "Content-Type: application/json" \
               -H "Authorization: Basic bW9oYW1lZGFsaXphaWRpNDhAZ21haWwuY29tOkFUQVRUM3hGZkdGMElreVJBQVhHWkJVaU94MTJpMmVidE5tbDlZY3ZqVU1ySjIwaXdBX1FfTDlzYzBodDVwRmkyLTM4RWptakpGclhBT0ZqSUNMSHpaOGw0Mzdyb0d5Q3BZU2dRX2Y4SFRlN05sSm52d18xOERSMmFULWdqV3RDTW1lUm5NTUlfVVhkc2E2LWlheTdPYldRd3R3c0VvM1d1LWluSjRPUk12OUxHTjVSYmU5dGZ1az1GQjAzODUwNw== \
               --data "{\"transition\": {\"id\": \"$TRANSITION_ID\"}}" \
-              "https://your-domain.atlassian.net/rest/api/2/issue/$ISSUE_KEY/transitions"
+              "https://your-domain.atlassian.net/rest/api/2/issue/SCRUM-8/transitions"
           fi
           #d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
