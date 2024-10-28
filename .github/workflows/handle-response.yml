@@ -17,6 +17,7 @@ jobs:
           JIRA_AUTH: "bW9oYW1lZGFsaXphaWRpNDhAZ21haWwuY29tOkFUQVRUM3hGZkdGMElreVJBQVhHWkJVaU94MTJpMmVidE5tbDlZY3ZqVU1ySjIwaXdBX1FfTDlzYzBodDVwRmkyLTM4RWptakpGclhBT0ZqSUNMSHpaOGw0Mzdyb0d5Q3BZU2dRX2Y4SFRlN05sSm52d18xOERSMmFULWdqV3RDTW1lUm5NTUlfVVhkc2E2LWlheTdPYldRd3R3c0VvM1d1LWluSjRPUk12OUxHTjVSYmU5dGZ1az1GQjAzODUwNw=="
         run: |
           echo "Action received: $ACTION"
+          echo "ISSUE_KEY: $ISSUE_KEY"
           
           if [ "$ACTION" == "approve" ]; then
             echo "Updating Jira issue $ISSUE_KEY to Approved"
