@@ -10,8 +10,8 @@ jobs:
     steps:
       - name: Handle Approval or Rejection
         run: |
-          ISSUE_KEY="${{ github.event.issueKey }}"
-          ACTION="${{ github.event.action }}"
+          ISSUE_KEY="${{ github.event.payload.client_payload.issue_key }}"
+          ACTION="${{ github.event.payload.event_type }}"
           echo "$ACTION"
           if [ "$ACTION" == "approve" ]; then
             echo "Updating Jira issue $ISSUE_KEY to Approved"
