@@ -72,13 +72,13 @@ jobs:
               "@type": "HttpPOST",
               "name": "Approve",
               "target": "https://hooks.zapier.com/hooks/catch/20436215/21j8rxv/",
-              "body": "{\"issueKey\": \"${{ github.event.client_payload.issue.key }}\", \"action\": \"approve\", \"workflow_url\": \"${{ github.server_url }}/${{ github.workflow }}\"}"
+              "body": "{\"issueKey\": \"${{ github.event.client_payload.issue_key }}\", \"action\": \"approve\", \"workflow_url\": \"${{ github.server_url }}/${{ github.workflow }}\"}"
             },
             {
               "@type": "HttpPOST",
               "name": "Reject",
               "target": "https://hooks.zapier.com/hooks/catch/20436215/21j8rxv/",
-              "body": "{\"issueKey\": \"${{ github.event.client_payload.issue.key }}\", \"action\": \"reject\", \"workflow_url\": \"${{ github.server_url }}/${{ github.workflow }}\"}"
+              "body": "{\"issueKey\": \"${{ github.event.client_payload.issue_key }}\", \"action\": \"reject\", \"workflow_url\": \"${{ github.server_url }}/${{ github.workflow }}\"}"
             }
           ]
           }
