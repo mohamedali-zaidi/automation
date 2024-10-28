@@ -9,25 +9,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Handle Approval or Rejection
+        env:
+          ISSUE_KEY: "${{ github.event.client_payload.issue_key }}"
+          ACTION: "${{ github.event.action }}"
+          JIRA_BASE_URL: "https://mohamedalizaidi48.atlassian.net"
+          # Replace with your GitHub secrets
+          JIRA_AUTH: "bW9oYW1lZGFsaXphaWRpNDhAZ21haWwuY29tOkFUQVRUM3hGZkdGMElreVJBQVhHWkJVaU94MTJpMmVidE5tbDlZY3ZqVU1ySjIwaXdBX1FfTDlzYzBodDVwRmkyLTM4RWptakpGclhBT0ZqSUNMSHpaOGw0Mzdyb0d5Q3BZU2dRX2Y4SFRlN05sSm52d18xOERSMmFULWdqV3RDTW1lUm5NTUlfVVhkc2E2LWlheTdPYldRd3R3c0VvM1d1LWluSjRPUk12OUxHTjVSYmU5dGZ1az1GQjAzODUwNw=="
         run: |
-          ISSUE_KEY="${{ github.event.payload.client_payload.issue_key }}"
-          ACTION="${{ github.event.payload.event_type }}"
-          echo "$ACTION"
+          echo "Action received: $ACTION"
+          
           if [ "$ACTION" == "approve" ]; then
             echo "Updating Jira issue $ISSUE_KEY to Approved"
             TRANSITION_ID="3"
-            curl -X POST \
-              -H "Content-Type: application/json" \
-              -H "Authorization: Basic bW9oYW1lZGFsaXphaWRpNDhAZ21haWwuY29tOkFUQVRUM3hGZkdGMElreVJBQVhHWkJVaU94MTJpMmVidE5tbDlZY3ZqVU1ySjIwaXdBX1FfTDlzYzBodDVwRmkyLTM4RWptakpGclhBT0ZqSUNMSHpaOGw0Mzdyb0d5Q3BZU2dRX2Y4SFRlN05sSm52d18xOERSMmFULWdqV3RDTW1lUm5NTUlfVVhkc2E2LWlheTdPYldRd3R3c0VvM1d1LWluSjRPUk12OUxHTjVSYmU5dGZ1az1GQjAzODUwNw== \
-              --data "{\"transition\": {\"id\": \"$TRANSITION_ID\"}}" \
-              "https://your-domain.atlassian.net/rest/api/2/issue/$ISSUE_KEY/transitions"
           elif [ "$ACTION" == "reject" ]; then
             echo "Updating Jira issue $ISSUE_KEY to Rejected"
             TRANSITION_ID="2"
-            curl -X POST \
-              -H "Content-Type: application/json" \
-              -H "Authorization: Basic bW9oYW1lZGFsaXphaWRpNDhAZ21haWwuY29tOkFUQVRUM3hGZkdGMElreVJBQVhHWkJVaU94MTJpMmVidE5tbDlZY3ZqVU1ySjIwaXdBX1FfTDlzYzBodDVwRmkyLTM4RWptakpGclhBT0ZqSUNMSHpaOGw0Mzdyb0d5Q3BZU2dRX2Y4SFRlN05sSm52d18xOERSMmFULWdqV3RDTW1lUm5NTUlfVVhkc2E2LWlheTdPYldRd3R3c0VvM1d1LWluSjRPUk12OUxHTjVSYmU5dGZ1az1GQjAzODUwNw== \
-              --data "{\"transition\": {\"id\": \"$TRANSITION_ID\"}}" \
-              "https://your-domain.atlassian.net/rest/api/2/issue/$ISSUE_KEY/transitions"
+          else
+            echo "Unknown action: $ACTION"
+            exit 1
           fi
+
+          # Make the API call to transition the issue
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Basic $JIRA_AUTH" \
+            --data "{\"transition\": {\"id\": \"$TRANSITION_ID\"}}" \
+            "$JIRA_BASE_URL/rest/api/2/issue/$ISSUE_KEY/transitions"
+
           #d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
