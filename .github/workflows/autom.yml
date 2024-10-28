@@ -40,7 +40,7 @@ jobs:
 
       # Step 4: Send Approval Request to MS Teams
       - name: Send Approval Request to MS Teams
-        if: ${{ github.event.client_payload.issue.fields.status.name == 'Awaiting for Approval' }}
+        if: ${{ github.event.client_payload.issue.fields.status.name == 'Awaiting Approval' }}
         run: |
           ISSUE_SUMMARY=$(echo "${{ github.event.client_payload.issue.fields.summary }}" | sed 's/"/\\"/g')
           ASSIGNEE=$(echo "${{ github.event.client_payload.issue.fields.assignee.displayName }}" | sed 's/"/\\"/g')
