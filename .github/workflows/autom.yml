@@ -46,6 +46,7 @@ jobs:
           ASSIGNEE=$(echo "${{ github.event.client_payload.issue.fields.assignee.displayName }}" | sed 's/"/\\"/g')
           DUE_DATE=$(echo "${{ github.event.client_payload.issue.fields.duedate }}" | sed 's/"/\\"/g')
           STATUS=$(echo "${{ github.event.client_payload.issue.fields.status.name }}" | sed 's/"/\\"/g')
+          issueKey=$(echo "${{ github.event.client_payload.issue_key }}" | sed 's/"/\\"/g')
 
           JSON_PAYLOAD=$(cat <<EOF
           {
